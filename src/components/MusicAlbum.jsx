@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMusicRecord } from "../redux/appReducer/action";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const MusicAlbum = () => {
   const dispatch = useDispatch();
@@ -10,22 +10,21 @@ const MusicAlbum = () => {
     (state) => state.appReducer
   );
   const location = useLocation();
-//   console.log(location)
+  //   console.log(location)
 
-console.log(musicRecords)
+  console.log(musicRecords);
 
   useEffect(() => {
     if (location || musicRecords.length === 0) {
       const genre = searchParams.getAll("genre");
       const sortBy = searchParams.get("sortBy");
-      const queryParams= {
-          params: {
-              genre:genre,
-              _sort:sortBy && 'year',
-              _order:sortBy
-
-          }
-      }
+      const queryParams = {
+        params: {
+          genre: genre,
+          _sort: sortBy && "year",
+          _order: sortBy,
+        },
+      };
 
       dispatch(getMusicRecord(queryParams));
     }
@@ -45,6 +44,8 @@ console.log(musicRecords)
                 borderRadius: "10px",
                 textAlign: "center",
                 fontWeight: "600",
+                height: "fit-content",
+                padding: "1rem",
               }}
               key={album.id}
             >
@@ -55,6 +56,23 @@ console.log(musicRecords)
               <p>Artist: {album.artist}</p>
               <p>{album.genre}</p>
               <p>{album.year}</p>
+              <Link to={`/music/${album.id}/edit`}>
+                <button
+                  style={{
+                    border: "none",
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                    marginTop: "1rem",
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "20px",
+                    padding: "8px 20px",
+                    width: "100%",
+                  }}
+                >
+                  Edit
+                </button>
+              </Link>
             </div>
           );
         })
